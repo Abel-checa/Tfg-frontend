@@ -11,7 +11,8 @@ export default new Vuex.Store({
         users: [],      // Array para almacenar los usuarios
         logged: false,  // Estado de autenticación login
         registered: false,// Estado de autenticación registro
-        actual_user: "" 
+        actual_user: "",
+        token_verification: false
     },
     mutations: {
         SET_USERS(state, users) {
@@ -24,6 +25,12 @@ export default new Vuex.Store({
             state.registered = status;
             console.log(state.registered);
         },
+        SET_ACTUALUSER(state, user) {
+            state.actual_user = user;
+        },
+        SET_TOKEN_VERIFICATION(state,verification){
+            state.token_verification = verification
+        }
     },
     actions: {
         async fetchUsers({ commit }) {
@@ -40,6 +47,7 @@ export default new Vuex.Store({
                 const userFound = state.users.find(x => x.nombre === user.nombre);
                 const verification = bcrypt.compareSync(user.password, userFound.password)
                 if(verification){
+                    commit('SET_ACTUALUSER', userFound);
                     commit('SET_LOGGED', !!userFound);
                 }
                 
@@ -57,6 +65,15 @@ export default new Vuex.Store({
                 commit('SET_REGISTERED', false)
             }
         },
+        async Validate({commit},token){
+            try{    
+                const response = await axios.post('http://localhost:3003/add',token)
+                commit('SET_TOKEN_VERIFICATION', response.data);
+
+            }catch(e){
+                console.log(e);
+            }
+        }
     },
 });
 
