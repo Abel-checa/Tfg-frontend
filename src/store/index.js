@@ -12,7 +12,9 @@ export default new Vuex.Store({
         logged: false,  // Estado de autenticación login
         registered: false,// Estado de autenticación registro
         actual_user: "",
-        token_verification: false
+        token_verification: false,
+        user_tasks: "",
+        transition: false
     },
     mutations: {
         SET_USERS(state, users) {
@@ -30,6 +32,10 @@ export default new Vuex.Store({
         },
         SET_TOKEN_VERIFICATION(state,verification){
             state.token_verification = verification
+        },
+        SET_USER_TASKS(state,verification){
+            state.user_tasks = verification
+            console.log(state.user_tasks);
         }
     },
     actions: {
@@ -48,6 +54,7 @@ export default new Vuex.Store({
                 const verification = bcrypt.compareSync(user.password, userFound.password)
                 if(verification){
                     commit('SET_ACTUALUSER', userFound);
+                    commit('SET_USER_TASKS', userFound.tareas);
                     commit('SET_LOGGED', !!userFound);
                 }
                 
