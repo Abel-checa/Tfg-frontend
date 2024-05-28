@@ -14,7 +14,8 @@ export default new Vuex.Store({
         actual_user: "",
         token_verification: false,
         user_tasks: "",
-        transition: false
+        transition: false,
+        input_done: false
     },
     mutations: {
         SET_USERS(state, users) {
@@ -31,11 +32,15 @@ export default new Vuex.Store({
             state.actual_user = user;
         },
         SET_TOKEN_VERIFICATION(state,verification){
+            console.log("verificacion: ",verification);
             state.token_verification = verification
         },
         SET_USER_TASKS(state,verification){
             state.user_tasks = verification
             console.log(state.user_tasks);
+        },
+        SET_INPUT(state,verification){
+            state.input_done = verification
         }
     },
     actions: {
@@ -73,9 +78,12 @@ export default new Vuex.Store({
             }
         },
         async Validate({commit},token){
-            try{    
-                const response = await axios.post('http://localhost:3003/add',token)
-                commit('SET_TOKEN_VERIFICATION', response.data);
+            try{ 
+                const token_verify={
+                    token: token
+                } 
+                const response = await axios.post('http://localhost:3003/validate',token_verify)
+                commit('SET_TOKEN_VERIFICATION', response.data.valid);
 
             }catch(e){
                 console.log(e);

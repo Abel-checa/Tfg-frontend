@@ -1,13 +1,11 @@
 <template>
   <section>
-    <div v-if="transition == false">
-        <h1>BASTIAN</h1>
-        <img src="../assets/BASTIAN 1.png" alt="" @click="acceder">
-        
-  </div>
-  <div v-else>
-    <img src="../assets/Dual Ring@1x-1.0s-200px-200px.gif" alt="" id="loading">
-  </div>
+    <div id="logo">
+        <img src="../assets/logo.png" alt="">
+        <button><p>Acceder</p></button>
+    </div>
+    
+    
   </section>
   
 </template>
@@ -37,38 +35,72 @@ export default {
 </script>
 
 <style lang="sass">
+    
     section
         height: 100vh
         width: 100%
         display: flex
         justify-content: center
         align-items: center
-        background-color: #2E263F
-        div
-            height: 90%
-            width: 50% 
+        background: #D9D9D9
+        justify-content: center
+        align-items: center
+        flex-direction: column
+        #logo
             display: flex
-            justify-content: space-evenly
-            align-items: center
             flex-direction: column
-            img 
-                height: 90%
-                width: 1200px
-                z-index: 2
-                margin-left: 145px
-                margin-bottom: 70px
-                
-            h1 
-                font-size: 230px
-                position: absolute
+            justify-content: start
+            align-items: center
+            img
                 z-index: 1
-                letter-spacing: 4px
-                color: #9678D3
-                font-weight: bold
-                filter: blur(2px)
-            #loading
-                height: 300px
-                width: 300px
-                margin-left: -50px
             
+
+            button
+                position: absolute
+                top: 70% 
+                z-index: 2
+                width: 200px
+                
+                padding: .6rem
+                background-color: black
+                border-radius: 10px
+                border: none
+                box-shadow: 0px 3px 8px
+                
+                p
+                    
+                    font-family: "Major Mono Display", monospace
+                    font-weight: 400
+                    font-style: normal
+                    color: white
+                    font-size: 25px
+                    transition: .4s
+                &:hover
+                    background-color: white
+
+                    p
+                        color: black
+                        font-weight: bold
+
+                    
+
+
+
+
+
+            // button
+            //     position: absolute
+            //     top: 70%
+            //     right: 45%
+            //     z-index: 2
+            //     width: 200px
+            //     height: 50px
+            //     background: none
+            //     font-size: 20px
+            //     box-shadow: -6px 15px 18px 10px rgba(0,0,0,0.1)
+                
+                
+                
+
+
 </style>
