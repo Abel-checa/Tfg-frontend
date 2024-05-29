@@ -1,6 +1,10 @@
 <template>
   <div v-if=token_verification>
-    <h1>Home</h1>
+    <div v-if="actual_user.cargo =='admin'" >
+      <p>Hola administrador</p>
+    </div>
+    <div v-else>
+        <h1>Home</h1>
     <div id="tasks">
       <div v-if="user_tasks.length == 0">
         <h1>Aun no tienes ninguna tarea añadida</h1>
@@ -23,6 +27,8 @@
           <h1>{{tarea}}</h1>
         </div>
       </div>
+    </div>
+
     </div>
   </div> 
   <div v-else>

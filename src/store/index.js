@@ -70,6 +70,7 @@ export default new Vuex.Store({
         },
         async RegisterUser({ commit },usuario) {
             try {
+                console.log('Usuario: ',usuario);
                 await axios.post('http://localhost:3003/add',usuario).then(response => commit('SET_REGISTERED', !!response.data));
                 
             } catch (error) {

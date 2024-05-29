@@ -1,7 +1,11 @@
 <template>
-  <div class="login-container">
+  <section>
+     <div id="logo">
+            <img src="../assets/logo.png" alt="">
+      </div>
+    <div class="login-container">
         <div class="login-form">
-        <h1>Register</h1>
+          <h1>Register</h1>
         
             <div class="input-group">
               <label for="username">Username</label>
@@ -16,15 +20,15 @@
               <label for="email">Email</label>
               <input type="email" id="email" v-model="email" required>
             </div>
-
-            <button @click="register">Register</button>
+            <div class="errors">
+                <p id="error">{{error}}</p> 
+            </div>
+            <p>Ahora te acuerdas que tienes cuenta??!<a href="/login"> Login</a></p>
+            <button @click="register"><p>Registrar</p></button>
         
         </div>
-        <div id="img_bastian">
-            <h1>BASTIAN</h1>    
-            <img src="../assets/BASTIAN 1.png" alt="">
-        </div>
   </div>
+  </section>
 </template>
 
 <script>
@@ -37,6 +41,7 @@ export default {
       password: "",
       email: "",
       cargo: "cliente",
+      error: ""
     }
   },
   methods: {
@@ -45,20 +50,24 @@ export default {
       this.$router.push({ name: 'login' });
     },
     async register(){
-      const secure =  await bcrypt.hash(this.password,10)
-      const newUser = {
-        nombre: this.username,
-        password: secure,
-        email: this.email,
-        cargo: this.cargo
-      }
-      await this.RegisterUser(newUser)
-      if(this.registered){
-        this.$router.push({ name: 'login' })
+      if(this.username == ""|| this.password=="" || this.email == "" || this.username.length <= 5 || this.password.length <= 5 || this.email.includes("@") != 1){
+          this.error = "Complete correctamente los campos"
       }else{
-        console.log(this.registered);
+          const secure =  await bcrypt.hash(this.password,10)
+          const newUser = {
+            nombre: this.username,
+            password: secure,
+            email: this.email,
+            cargo: this.cargo
+          }
+          console.log(newUser);
+          await this.RegisterUser(newUser)
+          if(this.registered){
+            this.$router.push({ name: 'login' })
+          }else{
+            console.log(this.registered);
+          }
       }
-
     },
     
     
@@ -71,100 +80,88 @@ export default {
 </script>
 
 <style  lang="sass">
-// Define variables
-$background-color: #2E263F
-$form-background-color: #FFFFFF
-$primary-color: #6C5B7B
-$input-border-color: #CCCCCC
-$input-focus-border-color: #6C5B7B
-$button-background-color: #6C5B7B
-$button-hover-background-color: #A59ACA
-$text-color: #333333
 
-body 
-  background-color: $background-color
-  display: flex
-  justify-content: center
-  align-items: center
-  height: 100vh
-  margin: 0
-  font-family: Arial, sans-serif
+    section
+        height: 100vh
+        width: 100%
+        display: flex
+        background: #D9D9D9
 
+        .login-container
+            height: 100%
+            width: 50%
+            display: flex
+            justify-content: center
+            align-items: center
+            .errors
+                width: 68%
+                height: 50px
+                display: flex
+                justify-content: center
+                align-items: center
+                
+                #error
+                    color: red
+                    width: 100%
+            p 
+                font-size: 13px
+                font-weight: bold
+                width: 60%
+                a 
+                    text-decoration: none
+                    color: red
+                    font-weight: bold
+                    &::hover
+                       color: orange 
+            button
+                width: 200px
+                padding: .6rem
+                background-color: black
+                border-radius: 10px
+                border: none
+                color: white
+                display: flex
+                justify-content: center
+                align-items: center
+                p 
+                    color: white
+                    font-size: 15px
+                    transition: .4s
+                    font-weight: bold
 
-.login-container 
-  background-color: $form-background-color
-  padding: 30px
-  border-radius: 8px
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
-  width: 300px
-  height: 500px
-  #img_bastian
-    height: 35%
-    margin-top: 30px
-    display: flex
-    justify-content: center
-    align-items: center
-    h1
-        font-size: 55px
-        position: absolute
-        z-index: 1
-        letter-spacing: 4px
-        color: #9678D3
-        font-weight: bold
-        
-    img
-        width: 500px
-        height: 200px
-        margin-left: 60px
-        z-index: 2
-        margin-bottom: 20px
+                &:hover
+                    background-color: white
 
-.login-form 
-  text-align: center
+                    p
+                        color: black
+                        font-weight: bold
+            .login-form
+                height: 60%
+                width: 40%
+                padding: .4rem
+                display: flex
+                flex-direction: column
+                justify-content: space-evenly
+                align-items: center
+                background-color: lightgrey
+                box-shadow: 0px 3px 8px
+                h1 
+                    font-size: 50px
+                    font-weight: bold
+            .input-group
+                display: flex
+                flex-direction: column
+                justify-content: space-between
+                align-items: center
+                width: 80%
+                height: 10%
+                input
+                    padding: .6rem
+                    outline: none
+                    border: none
+                label
+                    font-weight: bold
 
-  h1 
-    margin-bottom: 20px
-    color: $primary-color
-  
-
-  .input-group 
-    margin-bottom: 15px
-    text-align: left
-
-    label 
-      display: block
-      margin-bottom: 5px
-      color: $text-color
-    
-
-    input 
-      width: 100%
-      padding: 8px
-      border: 1px solid $input-border-color
-      border-radius: 4px
-      box-sizing: border-box
-      transition: border-color 0.3s
-
-      &:focus 
-        border-color: $input-focus-border-color
-        outline: none
-      
-    
-  
-
-  button 
-    width: 100%
-    padding: 10px
-    border: none
-    border-radius: 4px
-    background-color: $button-background-color
-    color: #FFFFFF
-    font-size: 16px
-    cursor: pointer
-    transition: background-color 0.3s
-
-    &:hover 
-      background-color: $button-hover-background-color
     
   
 

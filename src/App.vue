@@ -4,7 +4,7 @@
 
 <style lang="scss">
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -14,5 +14,9 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: "Major Mono Display", monospace;
+  font-weight: 400;
+  font-style: normal;
+  overflow: hidden;
 }
 </style>

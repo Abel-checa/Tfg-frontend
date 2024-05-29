@@ -2,7 +2,7 @@
   <section>
     <div id="logo">
         <img src="../assets/logo.png" alt="">
-        <button><p>Acceder</p></button>
+        <button @click="acceder"><p>Acceder</p></button>
     </div>
     
     
@@ -20,11 +20,7 @@ export default {
     },
     methods: {
         acceder(){
-            this.transition = true
-            setTimeout(()=>{
-                this.$router.push({name: "login"})
-            },5000)
-            
+            this.$router.push({name: "login"})
             
         }
     },
@@ -34,7 +30,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style scoped lang="sass">
     
     section
         height: 100vh

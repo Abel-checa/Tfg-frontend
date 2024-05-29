@@ -1,25 +1,30 @@
 <template>
 
-    <div class="login-container">
-        <div class="login-form">
-        <h1>Login</h1>
+    <section>
+        <div id="logo">
+            <img src="../assets/logo.png" alt="">
+        </div>
+        <div class="login-container">
+            <div class="login-form">
+                <h1>Login</h1>
         
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required v-model="user">
-            </div>
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required v-model="user">
+                </div>
             <div class="input-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required v-model="password">
             </div>
-            <button type="submit" @click="login">Login</button>
+            <div class="errors">
+                <p id="error">{{error}}</p>
+            </div>
+            <p>No tienes Cuenta?? <a href="/register">Registrate</a></p>
+            <button @click="login"><p>Acceder</p></button>
         
+            </div>
         </div>
-        <div id="img_bastian">
-            <h1>BASTIAN</h1>
-            <img src="../assets/BASTIAN 1.png" alt="">
-        </div>
-  </div>
+    </section>
 </template>
 
 <script>
@@ -30,24 +35,30 @@ export default {
     data() {
         return {
             user: "",
-            password: ""
+            password: "",
+            error: ""
         };
     },
     methods: {
         ...mapActions(['LOGIN', 'fetchUsers']),
         async login() {
-            const new_user = {
+            if(this.user == ""|| this.password==""){
+                this.error = "Complete correctamente los campos"
+            }else{
+                const new_user = {
                 nombre: this.user,
                 password: this.password
-            };
+                };
 
-            await this.LOGIN(new_user);
+                await this.LOGIN(new_user);
 
-            if (this.logged) {
-                this.$router.push({ name: 'home', params: { user: this.user } });
-            } else {
-                this.$router.push({ name: 'register' });
+                if (this.logged) {
+                    this.$router.push({ name: 'home', params: { user: this.user } });
+                } else {
+                    this.$router.push({ name: 'register' });
+                }
             }
+            
         }
     },
     computed: {
@@ -59,104 +70,83 @@ export default {
 };
 </script>
 
-<style  lang="sass">
-// Define variables
-$background-color: #2E263F
-$form-background-color: #FFFFFF
-$primary-color: #6C5B7B
-$input-border-color: #CCCCCC
-$input-focus-border-color: #6C5B7B
-$button-background-color: #6C5B7B
-$button-hover-background-color: #A59ACA
-$text-color: #333333
+<style scoped lang="sass">
+    section
+        height: 100vh
+        width: 100%
+        display: flex
+        background: #D9D9D9
 
-// Style the body
-body 
-  background-color: $background-color
-  display: flex
-  justify-content: center
-  align-items: center
-  height: 100vh
-  margin: 0
-  font-family: Arial, sans-serif
+        .login-container
+            height: 100%
+            width: 50%
+            display: flex
+            justify-content: center
+            align-items: center
+            .errors
+                width: 68%
+                height: 50px
+                display: flex
+                justify-content: center
+                align-items: center
+                margin-top: -30px
+                #error
+                    color: red
 
+            p 
+                font-size: 13px
+                font-weight: bold
+                a 
+                    text-decoration: none
+                    color: red
+                    font-weight: bold
+                    &::hover
+                       color: orange 
+            button
+                width: 200px
+                padding: .6rem
+                background-color: black
+                border-radius: 10px
+                border: none
+                
+                color: white
+                p 
+                    color: white
+                    font-size: 15px
+                    transition: .4s
+                &:hover
+                    background-color: white
 
-// Style the login container
-.login-container 
-  background-color: $form-background-color
-  padding: 30px
-  border-radius: 8px
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
-  width: 300px
-  height: 500px
-  #img_bastian
-    height: 35%
-    margin-top: 30px
-    display: flex
-    justify-content: center
-    align-items: center
-    h1
-        font-size: 55px
-        position: absolute
-        z-index: 1
-        letter-spacing: 4px
-        color: #9678D3
-        font-weight: bold
-        
-    img
-        width: 500px
-        height: 200px
-        margin-left: 60px
-        z-index: 2
-        margin-bottom: 20px
+                    p
+                        color: black
+                        font-weight: bold
+            .login-form
+                height: 60%
+                width: 40%
+                padding: .4rem
+                display: flex
+                flex-direction: column
+                justify-content: space-evenly
+                align-items: center
+                background-color: lightgrey
+                box-shadow: 0px 3px 8px
+                h1 
+                    font-size: 60px
+                    font-weight: bold
+            .input-group
+                display: flex
+                flex-direction: column
+                justify-content: space-between
+                align-items: center
+                width: 80%
+                height: 10%
+                input
+                    padding: .6rem
+                    outline: none
+                    border: none
+                label
+                    font-weight: bold
 
-// Style the login form
-.login-form 
-  text-align: center
-
-  h1 
-    margin-bottom: 20px
-    color: $primary-color
-  
-
-  .input-group 
-    margin-bottom: 15px
-    text-align: left
-
-    label 
-      display: block
-      margin-bottom: 5px
-      color: $text-color
-    
-
-    input 
-      width: 100%
-      padding: 8px
-      border: 1px solid $input-border-color
-      border-radius: 4px
-      box-sizing: border-box
-      transition: border-color 0.3s
-
-      &:focus 
-        border-color: $input-focus-border-color
-        outline: none
-      
-    
-  
-
-  button 
-    width: 100%
-    padding: 10px
-    border: none
-    border-radius: 4px
-    background-color: $button-background-color
-    color: #FFFFFF
-    font-size: 16px
-    cursor: pointer
-    transition: background-color 0.3s
-
-    &:hover 
-      background-color: $button-hover-background-color
     
   
 
