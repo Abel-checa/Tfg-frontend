@@ -32,16 +32,14 @@ export default new Vuex.Store({
             state.actual_user = user;
         },
         SET_TOKEN_VERIFICATION(state,verification){
-            console.log("verificacion: ",verification);
             state.token_verification = verification
         },
         SET_USER_TASKS(state,verification){
-            state.user_tasks = verification
-            console.log(state.user_tasks);
+            state.user_tasks = verification        
         },
         SET_INPUT(state,verification){
             state.input_done = verification
-        }
+        },
     },
     actions: {
         async fetchUsers({ commit }) {
@@ -89,7 +87,19 @@ export default new Vuex.Store({
             }catch(e){
                 console.log(e);
             }
+        },
+        async AddTask({ commit }, object) {
+            try {
+                console.log(object);
+                const response = await axios.post("http://localhost:3003/usertask/"+object.user, object.tarea);
+                commit('SET_USER_TASKS', response.data.tareas);
+                console.log(response.data);
+            } catch (error) {
+                console.error('Error Registering User:', error);
+                commit('SET_REGISTERED', false);
+            }
         }
+        ,
     },
 });
 
