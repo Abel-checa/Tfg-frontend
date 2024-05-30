@@ -20,8 +20,14 @@ const routes = [
     path: '/home/:user',
     name: 'home',
     component: () => import(/* webpackChunkName: "about" */ '../views/HomeView.vue')
+  },
+  {
+    path: '/task/:user',
+    name: 'tareas',
+    component: () => import(/* webpackChunkName: "about" */ '../views/UserTasksView.vue')
   }
 ]
+
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
