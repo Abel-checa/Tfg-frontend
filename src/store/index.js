@@ -15,7 +15,8 @@ export default new Vuex.Store({
         token_verification: false,
         user_tasks: "",
         transition: false,
-        input_done: false
+        input_done: false,
+        user_warnings: []
     },
     mutations: {
         SET_USERS(state, users) {
@@ -40,6 +41,13 @@ export default new Vuex.Store({
         SET_INPUT(state,verification){
             state.input_done = verification
         },
+        UPDATE_USER_TASKS(state,verification){
+            state.user_tasks = verification
+        },
+        SET_AVISOS(state,avisos){
+            state.user_warnings = avisos
+            console.log('User_warnings:',state.user_warnings);
+        }
     },
     actions: {
         async fetchUsers({ commit }) {
@@ -91,15 +99,25 @@ export default new Vuex.Store({
         async AddTask({ commit }, object) {
             try {
                 console.log(object);
-                const response = await axios.post("http://localhost:3003/usertask/"+object.user, object.tarea);
+                const response = await axios.post("http://localhost:3003/usertask/"+object.user, object.tareas);
                 commit('SET_USER_TASKS', response.data.tareas);
                 console.log(response.data);
             } catch (error) {
                 console.error('Error Registering User:', error);
                 commit('SET_REGISTERED', false);
             }
+        },
+        async Avisos({commit}, objeto){
+            try{
+                console.log('objeto  en avisos',objeto);
+                console.log('He entrado en avisos');
+                const response = await axios.get('http://localhost:3003/notCompleted/'+objeto.user)
+                console.log(response.data);
+                commit('SET_AVISOS',response.data)
+            }catch(error){
+                console.log(error);
+            }
         }
-        ,
     },
 });
 

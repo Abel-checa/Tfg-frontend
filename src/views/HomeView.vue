@@ -24,15 +24,25 @@
           </nav>
 
           <div id="contenedor">
-            <div>
-              <div id="avisos">
+            
+            <div id="avisos">                
+                <div v-if="user_warnings.length == 0" id="nothing">
+                  <h1>Enhorabuena!! No tienes ninguna tarea por completar</h1>
+                  <img src="https://media.tenor.com/WsmiS-hUZkEAAAAj/verify.gif" alt="">
+                </div>
+                <div v-else  id="something">
+                  <div id="texto">
+                    <p>Parece que tienes Tareas que caducar</p>
+                  </div>
+                  <div class="target">
 
-              </div>
-
-              <div id="tiempo">
-
-              </div>
+                  </div>
+                </div>
             </div>
+            <div id="tiempo">
+              
+            </div>
+                
           </div>
         
     </div>
@@ -42,15 +52,26 @@
 
 
 <script>
-import { mapState } from 'vuex'
+
+import { mapActions, mapState } from 'vuex'
 export default {
+  name: "HomeView",
   data() {
     return {
       show: true,
-       currentTime: this.getCurrentTime()
+      warnings: [],
+      currentTime: this.getCurrentTime()
     };
   },
   methods: {
+    ...mapActions(['Avisos']),
+    getWarnings(){
+      const object = {
+        user: this.actual_user.nombre
+      }
+      this.Avisos(object);
+      this.warnings = this.user_warnings
+    },
     transicion(){
       setTimeout(()=>{
         this.show = false
@@ -68,11 +89,12 @@ export default {
     }
   },
   computed: {
-    ...mapState(['actual_user','user_tasks'])
+    ...mapState(['actual_user','user_tasks','user_warnings'])
   },
   mounted(){
     this.transicion(),
-    this.timer = setInterval(this.updateTime, 1000);
+    this.timer = setInterval(this.updateTime, 1000),
+    this.getWarnings();
   },
   beforeUnmount() {
     clearInterval(this.timer);
@@ -83,8 +105,8 @@ export default {
 
 
 
-/* Entrada y Salida */
 <style scoped lang="sass">
+
 /* Transiciones para entrada y salida */
 #interfaz
   height: 100vh
@@ -113,7 +135,7 @@ export default {
         height: 400px
         width: 430px
         margin-bottom: -75px
-    
+
     #time
       width: 33%
       height: 100%
@@ -147,7 +169,33 @@ export default {
   #contenedor
     height: 85%
     width: 100%
-    
+    display: flex
+    justify-content: center
+    align-items: center
+
+    #tiempo
+      height: 100%
+      width: 60%
+      display: flex
+      justify-content: center
+      align-items: center 
+    #avisos
+      height: 80%
+      width: 30%
+      display: flex
+      justify-content: center
+      align-items: center
+      #nothing
+        height: 100%
+        width: 100%
+        display: flex
+        justify-content: center
+        flex-direction: column
+        align-items: center
+        h1
+          font-size: 40px
+          font-weight: bold
+          margin-bottom: 30px
 
 
 #app
@@ -175,6 +223,3 @@ export default {
 
 
 </style>
-
-
-
