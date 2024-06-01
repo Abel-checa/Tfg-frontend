@@ -17,33 +17,51 @@
             <div id="rutas">
               <ul>
                 <i class="fa-solid fa-list-check" @click="ir_user_task"></i>
-                <i class="fa-solid fa-plus"></i>
+                <i class="fa-solid fa-plus" @click="ir_add"></i>
                 <i class="fa-solid fa-user"></i>
               </ul>
             </div>
           </nav>
 
-          <div id="contenedor">
-            
-            <div id="avisos">                
-                <div v-if="user_warnings.length == 0" id="nothing">
-                  <h1>Enhorabuena!! No tienes ninguna tarea por completar</h1>
-                  <img src="https://media.tenor.com/WsmiS-hUZkEAAAAj/verify.gif" alt="">
-                </div>
-                <div v-else  id="something">
-                  <div id="texto">
-                    <p>Parece que tienes Tareas que caducar</p>
-                  </div>
-                  <div class="target">
-
-                  </div>
-                </div>
-            </div>
-            <div id="tiempo">
+          <section id="content">
+              <div id="contenedor">
               
-            </div>
-                
-          </div>
+                  <div id="avisos">                
+                      <div v-if="user_warnings.length == 0" id="nothing">
+                        <h1>Enhorabuena!! No tienes ninguna tarea por completar</h1>
+                        <img src="https://media.tenor.com/WsmiS-hUZkEAAAAj/verify.gif" alt="">
+                      </div>
+                      <div v-else  id="something">
+                          <div id="texto">
+                            <h1>Parece que tienes Tareas que van a caducar</h1>
+                          </div>
+
+                          <div class="target">
+                            <div v-for="aviso in user_warnings" :key="aviso" class="box animate__animated animate__fadeInLeft">
+                              <p>{{aviso.nombre}}</p>
+                              <p>{{aviso.endtime}}</p>
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div id="contenedor2">
+                  <div id="calendar">
+                      <vue-cal
+                          class="vuecal--date-picker"
+                          xsmall
+                          hide-view-selector
+                          :time="false"
+                          :transitions="false"
+                          active-view="month"
+                          :disable-views="['week']"
+                          style="width: 1px;height: 530px;box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                      </vue-cal>
+                  </div>
+
+              </div>
+          </section>
         
     </div>
   </div>
@@ -52,15 +70,17 @@
 
 
 <script>
-
+import 'vue-cal/dist/vuecal.css'
+import VueCal from 'vue-cal'
 import { mapActions, mapState } from 'vuex'
 export default {
   name: "HomeView",
+  components: { VueCal },
   data() {
     return {
       show: true,
       warnings: [],
-      currentTime: this.getCurrentTime()
+      currentTime: this.getCurrentTime(),
     };
   },
   methods: {
@@ -86,6 +106,9 @@ export default {
     },
     ir_user_task(){
       this.$router.push({name: "tareas", params: { user: this.$route.params.user}})
+    },
+    ir_add(){
+      this.$router.push({ name: 'add', params: { user: this.actual_user.nombre } })
     }
   },
   computed: {
@@ -94,7 +117,7 @@ export default {
   mounted(){
     this.transicion(),
     this.timer = setInterval(this.updateTime, 1000),
-    this.getWarnings();
+    this.getWarnings()
   },
   beforeUnmount() {
     clearInterval(this.timer);
@@ -106,6 +129,31 @@ export default {
 
 
 <style scoped lang="sass">
+#content
+  height: 85%
+  width: 100%
+  display: flex
+  justify-content: center
+  align-items: center
+
+#contenedor2
+  width: 50%
+  height: 100%
+  display: flex
+  justify-content: center
+  align-items: center
+  flex-direction: column
+  #tiempo
+    height: 20%
+    width: 50%
+  #calendar
+    height: 80%
+    width: 70%
+    display: flex
+    justify-content: center
+    align-items: center
+  
+    
 
 /* Transiciones para entrada y salida */
 #interfaz
@@ -168,7 +216,7 @@ export default {
             border-bottom: 2px solid           
   #contenedor
     height: 85%
-    width: 100%
+    width: 50%
     display: flex
     justify-content: center
     align-items: center
@@ -181,10 +229,48 @@ export default {
       align-items: center 
     #avisos
       height: 80%
-      width: 30%
+      width: 80%
       display: flex
       justify-content: center
       align-items: center
+      #something
+        border-left: 2px solid
+        height: 100%
+        width: 100%
+        display: flex
+        justify-content: start
+        align-items: center
+        flex-direction: column
+        
+        #texto
+          position: relative
+          top: 0
+          height: 50px
+          width: 100%
+          display: flex
+          justify-content: center
+          align-items: center 
+          font-weight: bold
+          border-bottom: 2px solid
+          h1 
+            letter-spacing: -2px
+
+
+        .target
+          height: 75%
+          width: 100%
+          display: flex
+          flex-direction: column
+          justify-content: center
+          align-items: flex-start
+          .box
+            width: 60%
+            height: 70px
+            box-shadow: 0px 3px 8px
+            display: flex
+            justify-content: space-around
+            align-items: center
+
       #nothing
         height: 100%
         width: 100%
@@ -196,6 +282,9 @@ export default {
           font-size: 40px
           font-weight: bold
           margin-bottom: 30px
+        img 
+          height: 100px
+          width: 100px
 
 
 #app
@@ -219,7 +308,7 @@ export default {
 
       --animate-duration: 5s
 
-
+// media query responsive
 
 
 </style>

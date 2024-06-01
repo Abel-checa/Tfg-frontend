@@ -25,6 +25,11 @@ const routes = [
     path: '/task/:user',
     name: 'tareas',
     component: () => import(/* webpackChunkName: "about" */ '../views/UserTasksView.vue')
+  },
+  {
+    path: '/add/:user',
+    name: 'add',
+    component: () => import(/* webpackChunkName: "about" */ '../views/AddView.vue')
   }
 ]
 

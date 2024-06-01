@@ -16,7 +16,8 @@ export default new Vuex.Store({
         user_tasks: "",
         transition: false,
         input_done: false,
-        user_warnings: []
+        user_warnings: [],
+        deleted_task : false
     },
     mutations: {
         SET_USERS(state, users) {
@@ -47,6 +48,9 @@ export default new Vuex.Store({
         SET_AVISOS(state,avisos){
             state.user_warnings = avisos
             console.log('User_warnings:',state.user_warnings);
+        },
+        SET_DELETED_TASK(state,verification){
+            state.user_tasks = verification
         }
     },
     actions: {
@@ -98,8 +102,8 @@ export default new Vuex.Store({
         },
         async AddTask({ commit }, object) {
             try {
-                console.log(object);
-                const response = await axios.post("http://localhost:3003/usertask/"+object.user, object.tareas);
+                
+                const response = await axios.post("http://localhost:3003/usertask/"+object.user, object.tarea);
                 commit('SET_USER_TASKS', response.data.tareas);
                 console.log(response.data);
             } catch (error) {
@@ -109,6 +113,7 @@ export default new Vuex.Store({
         },
         async Avisos({commit}, objeto){
             try{
+                
                 console.log('objeto  en avisos',objeto);
                 console.log('He entrado en avisos');
                 const response = await axios.get('http://localhost:3003/notCompleted/'+objeto.user)
@@ -117,7 +122,16 @@ export default new Vuex.Store({
             }catch(error){
                 console.log(error);
             }
+        },
+        async RemoveTask({commit}, objeto){
+            const param = {
+                nombre: objeto.nombre
+            }
+            const response = await axios.post('http://localhost:3003/deleteTask/'+objeto.user,param)
+            commit('SET_DELETED_TASK', response.data)
+            console.log('Deleted_task',response.data);
         }
+        
     },
 });
 
